@@ -15,17 +15,17 @@ Objetivos
 
 4) Realizar un análisis empírico:
 
- - Pruebas de Estrés: Realizar mediciones de tiempo de ejecución para valores de N que varíen desde 101 hasta 106 términos.
+ - *Pruebas de Estrés:* Realizar mediciones de tiempo de ejecución para valores de N que varíen desde 101 hasta 106 términos.
 
- - Gráficas de Rendimiento: Generar una comparativa visual de Tiempo  vs  N.
+ - *Gráficas de Rendimiento:* Generar una comparativa visual de Tiempo  vs  N.
 
- - Análisis de Error: Comparar la precisión obtenida frente a la función nativa del lenguaje 
+ - *Análisis de Error:* Comparar la precisión obtenida frente a la función nativa del lenguaje 
 
 5) Entregable
 
-Código Fuente: Documentado.
+ - *Código Fuente:* Documentado.
 
-Informe de Complejidad: Un documento que explique por qué una versión es superior a la otra basándose en el conteo de instrucciones.
+ - *Informe de Complejidad:* Un documento que explique por qué una versión es superior a la otra basándose en el conteo de instrucciones.
 
-Conclusiones: considerando precisión numérica y eficiencia algorítmica de los resultados obtenidos.
+ - *Conclusiones:* considerando precisión numérica y eficiencia algorítmica de los resultados obtenidos.
 
