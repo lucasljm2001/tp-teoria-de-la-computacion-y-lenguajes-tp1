@@ -4,7 +4,7 @@ import multiprocessing as mp
 import time
 from pathlib import Path
 
-from version1 import taylor_e_x_1, taylor_e_x_2
+from taylor import taylor_e_x_horner, taylor_e_x_naive
 
 
 X_VALUE = 4
@@ -74,7 +74,7 @@ def write_csv(rows):
 
 def print_summary(rows):
     print("Resumen de resultados:")
-    print("N | t1_time(s) | t1_rel_error | t2_time(s) | t2_rel_error | t2_status")
+    print("N | horner_time(s) | horner_rel_error | naive_time(s) | naive_rel_error | naive_status")
     for r in rows:
         t1_rel = f"{r['t1_rel_error']:.3e}" if r["t1_rel_error"] is not None else "-"
         t2_rel = f"{r['t2_rel_error']:.3e}" if r["t2_rel_error"] is not None else "-"
@@ -94,9 +94,9 @@ def save_plot(rows, output_file, title):
     t2_times = [r["t2_time"] for r in rows if r["t2_status"] == "ok"]
 
     plt.figure(figsize=(10, 6))
-    plt.plot(ns_1, t1_times, marker="o", label="taylor_e_x_1 (Horner)")
+    plt.plot(ns_1, t1_times, marker="o", label="horner (optimizada - Horner)")
     if ns_2:
-        plt.plot(ns_2, t2_times, marker="s", label="taylor_e_x_2 (sumatoria + factorial)")
+        plt.plot(ns_2, t2_times, marker="s", label="naive (sumatoria + factorial)")
     plt.xscale("log")
     plt.yscale("log")
     plt.xlabel("N (terminos)")
@@ -147,8 +147,8 @@ def main():
                 "t2_status": "ok",
             }
 
-            print(f"  - Ejecutando taylor_e_x_1 para N={n}...", flush=True)
-            t1 = timed_call(taylor_e_x_1, X_VALUE, n, timeout_seconds=MAX_SECONDS_PER_CALL)
+            print(f"  - Ejecutando horner (optimizada) para N={n}...", flush=True)
+            t1 = timed_call(taylor_e_x_horner, X_VALUE, n, timeout_seconds=MAX_SECONDS_PER_CALL)
             row["t1_time"] = t1["time"]
             if t1["ok"]:
                 row["t1_value"] = t1["value"]
@@ -157,8 +157,8 @@ def main():
             else:
                 row["t1_status"] = t1["error"]
 
-            print(f"  - Ejecutando taylor_e_x_2 para N={n}...", flush=True)
-            t2 = timed_call(taylor_e_x_2, X_VALUE, n, timeout_seconds=MAX_SECONDS_PER_CALL)
+            print(f"  - Ejecutando naive (sumatoria) para N={n}...", flush=True)
+            t2 = timed_call(taylor_e_x_naive, X_VALUE, n, timeout_seconds=MAX_SECONDS_PER_CALL)
             row["t2_time"] = t2["time"]
             if t2["ok"]:
                 row["t2_value"] = t2["value"]
