@@ -67,3 +67,17 @@ Notas
 - El benchmark ejecuta cada llamada en un subproceso con un timeout por llamada definido en `benchmark_analysis.py` (variable `MAX_SECONDS_PER_CALL`).
 - La gráfica compara tiempo de ejecución vs número de términos `N` usando escala log-log.
 
+Sobre los PNG generados
+----------------------
+
+- `performance_vs_n.png`: gráfica final que se genera al terminar el benchmark. Muestra, en escala log-log, el tiempo de ejecución frente al número de términos `N` para cada implementación (`horner`, `naive` y `optmizada`). Es el artefacto principal para interpretar el rendimiento empírico y comparar la complejidad práctica entre implementaciones.
+- `performance_vs_n_preliminar.png`: gráfica preliminar que se guarda si la ejecución supera el umbral definido por `PRELIM_AFTER_SECONDS`. Útil para revisiones parciales cuando el benchmark tarda y para detectar problemas tempranos (por ejemplo, una implementación que escala mal para valores pequeños de `N`).
+
+Por qué son importantes
+----------------------
+
+- Visualizan diferencias de escala y pendiente entre algoritmos, permitiendo identificar cuál crece más rápido al aumentar `N`.
+- Permiten correlacionar tiempo de ejecución con errores relativos en `benchmark_results.csv` y facilita conclusiones sobre trade-offs precisión/eficiencia.
+- Son útiles para informes y para detectar regresiones de rendimiento tras cambios en el código.
+
+
