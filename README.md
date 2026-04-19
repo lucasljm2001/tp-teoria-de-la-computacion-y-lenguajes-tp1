@@ -29,3 +29,41 @@ Objetivos
 
  - **Conclusiones:** considerando precisión numérica y eficiencia algorítmica de los resultados obtenidos.
 
+Requisitos y ejecución
+---------------------
+
+**Requisitos:**
+- Python 3.8+ (recomendado).
+- Instalar dependencias listadas en `requirements.txt`.
+
+Instalación rápida:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Archivos principales
+- `taylor.py`: contiene las implementaciones de la aproximación de e^x: `taylor_e_x_horner` (Horner), `taylor_e_x_naive` (sumatoria) y `taylor_e_x_optmizada` (iterativa optimizada).
+- `benchmark_analysis.py`: script para ejecutar mediciones de tiempo, calcular errores relativos y generar una gráfica comparativa y un CSV con resultados.
+- `benchmark_results.csv`: archivo de salida con los resultados del benchmark (se crea al ejecutar `benchmark_analysis.py`).
+
+Cómo ejecutar
+
+- Ejecutar el script de ejemplo de las implementaciones:
+
+```bash
+python taylor.py
+```
+
+- Ejecutar el benchmark (genera `benchmark_results.csv` y `performance_vs_n.png`):
+
+```bash
+python benchmark_analysis.py
+```
+
+Notas
+- El benchmark ejecuta cada llamada en un subproceso con un timeout por llamada definido en `benchmark_analysis.py` (variable `MAX_SECONDS_PER_CALL`).
+- La gráfica compara tiempo de ejecución vs número de términos `N` usando escala log-log.
+
