@@ -4,7 +4,7 @@ import multiprocessing as mp
 import time
 from pathlib import Path
 
-from taylor import taylor_e_x_horner, taylor_e_x_naive
+from taylor import taylor_e_x_horner, taylor_e_x_naive, taylor_e_x_optmizada
 
 
 X_VALUE = 4
@@ -13,7 +13,7 @@ OUTPUT_CSV = Path("benchmark_results.csv")
 PLOT_FILE = Path("performance_vs_n.png")
 PRELIM_PLOT_FILE = Path("performance_vs_n_preliminar.png")
 PRELIM_AFTER_SECONDS = 10
-MAX_SECONDS_PER_CALL = 15
+MAX_SECONDS_PER_CALL = 25
 
 
 def _worker(func, x, n, queue):
@@ -74,13 +74,14 @@ def write_csv(rows):
 
 def print_summary(rows):
     print("Resumen de resultados:")
-    print("N | horner_time(s) | horner_rel_error | naive_time(s) | naive_rel_error | naive_status")
+    print("N | horner_time(s) | horner_rel_error | naive_time(s) | naive_rel_error | opt_time(s) | opt_rel_error | opt_status")
     for r in rows:
         t1_rel = f"{r['t1_rel_error']:.3e}" if r["t1_rel_error"] is not None else "-"
         t2_rel = f"{r['t2_rel_error']:.3e}" if r["t2_rel_error"] is not None else "-"
+        t3_rel = f"{r['t3_rel_error']:.3e}" if r["t3_rel_error"] is not None else "-"
         print(
             f"{r['n']:>7} | {r['t1_time']:>10.6f} | {t1_rel:>12} | "
-            f"{r['t2_time']:>10.6f} | {t2_rel:>12} | {r['t2_status']}"
+            f"{r['t2_time']:>10.6f} | {t2_rel:>12} | {r['t3_time']:>10.6f} | {t3_rel:>12} | {r['t3_status']}"
         )
 
 
@@ -93,10 +94,15 @@ def save_plot(rows, output_file, title):
     ns_2 = [r["n"] for r in rows if r["t2_status"] == "ok"]
     t2_times = [r["t2_time"] for r in rows if r["t2_status"] == "ok"]
 
+    ns_3 = [r["n"] for r in rows if r.get("t3_status") == "ok"]
+    t3_times = [r["t3_time"] for r in rows if r.get("t3_status") == "ok"]
+
     plt.figure(figsize=(10, 6))
     plt.plot(ns_1, t1_times, marker="o", label="horner (optimizada - Horner)")
     if ns_2:
         plt.plot(ns_2, t2_times, marker="s", label="naive (sumatoria + factorial)")
+    if ns_3:
+        plt.plot(ns_3, t3_times, marker="^", label="opt (iterativa optimizada)")
     plt.xscale("log")
     plt.yscale("log")
     plt.xlabel("N (terminos)")
@@ -145,6 +151,11 @@ def main():
                 "t2_abs_error": None,
                 "t2_rel_error": None,
                 "t2_status": "ok",
+                "t3_time": None,
+                "t3_value": None,
+                "t3_abs_error": None,
+                "t3_rel_error": None,
+                "t3_status": "ok",
             }
 
             print(f"  - Ejecutando horner (optimizada) para N={n}...", flush=True)
@@ -166,6 +177,16 @@ def main():
                 row["t2_rel_error"] = relative_error(t2["value"], reference)
             else:
                 row["t2_status"] = t2["error"]
+
+            print(f"  - Ejecutando opt (iterativa optimizada) para N={n}...", flush=True)
+            t3 = timed_call(taylor_e_x_optmizada, X_VALUE, n, timeout_seconds=MAX_SECONDS_PER_CALL)
+            row["t3_time"] = t3["time"]
+            if t3["ok"]:
+                row["t3_value"] = t3["value"]
+                row["t3_abs_error"] = abs(t3["value"] - reference)
+                row["t3_rel_error"] = relative_error(t3["value"], reference)
+            else:
+                row["t3_status"] = t3["error"]
 
             rows.append(row)
 
