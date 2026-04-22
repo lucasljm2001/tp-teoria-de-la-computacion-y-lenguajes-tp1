@@ -63,6 +63,12 @@ python taylor.py
 python benchmark_analysis.py
 ```
 
+- Ejecutar el análisis de memoria (genera `memory_comparison.png` y muestra picos en consola):
+
+```bash
+python memory_analysis.py
+```
+
 Notas
 - El benchmark ejecuta cada llamada en un subproceso con un timeout por llamada definido en `benchmark_analysis.py` (variable `MAX_SECONDS_PER_CALL`).
 - La gráfica compara tiempo de ejecución vs número de términos `N` usando escala log-log.
@@ -72,3 +78,5 @@ Sobre los PNG generados
 
 - `performance_vs_n.png`: gráfica final que se genera al terminar el benchmark. Muestra, en escala log-log, el tiempo de ejecución frente al número de términos `N` para cada implementación (`horner`, `naive` y `optmizada`). Es el artefacto principal para interpretar el rendimiento empírico y comparar la complejidad práctica entre implementaciones.
 - `performance_vs_n_preliminar.png`: gráfica preliminar que se guarda si la ejecución supera el umbral definido por `PRELIM_AFTER_SECONDS`. Útil para revisiones parciales cuando el benchmark tarda y para detectar problemas tempranos (por ejemplo, una implementación que escala mal para valores pequeños de `N`).
+
+- `memory_comparison.png`: gráfico de barras con el pico de memoria observado (en KiB) para cada implementación de `taylor.py`. Interpretación: barras más bajas indican menor uso máximo de memoria; diferencias pequeñas (<1 KiB) pueden deberse a ruido del intérprete, por lo que conviene repetir la medición o aumentar `n` para obtener diferencias significativas.
