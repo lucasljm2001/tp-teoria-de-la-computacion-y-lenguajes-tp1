@@ -48,6 +48,7 @@ Archivos principales
 - `taylor.py`: contiene las implementaciones de la aproximación de e^x: `taylor_e_x_horner` (Horner), `taylor_e_x_naive` (sumatoria) y `taylor_e_x_optmizada` (iterativa optimizada).
 - `benchmark_analysis.py`: script para ejecutar mediciones de tiempo, calcular errores relativos y generar una gráfica comparativa y un CSV con resultados.
 - `benchmark_results.csv`: archivo de salida con los resultados del benchmark (se crea al ejecutar `benchmark_analysis.py`).
+- `memory_analysis.py`: script para medir el pico de uso de memoria de las distintas implementaciones y generar la gráfica `memory_comparison.png`.
 
 Cómo ejecutar
 
